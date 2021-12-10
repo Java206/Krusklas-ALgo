@@ -1,4 +1,4 @@
-import java.io.*;
+mport java.io.*;
 import java.util.*;
 
 public class PowerGrid {
@@ -37,14 +37,20 @@ public class PowerGrid {
                 s.add(e);
                 v.add(one);
                 v.add(two);
-            }
+                
+            } else {
+            	s.add(e);
+            	v.add(one);
+            	v.add(two);            
+            	}
 
         }
         Iterator i = s.iterator();
         while (i.hasNext()) {
-            // System.out.println(((Edge) i.next()).getData());
+             System.out.println(((Edge) i.next()).getData());
         }
-        return s;
+        
+        return null ;
 
     }
 
@@ -70,13 +76,47 @@ public class PowerGrid {
             System.out.println(ed.getData());
         }
 
-        System.out.println(Kruskal(G));
+       // System.out.println(Kruskal(G));
+        
+        //accept keyboard input of filename
+        String s = AcceptKeyboardInput();
+
+        // Create a new SimpleGraph object to store the data
+   
+        GraphInput.LoadSimpleGraph(G, s);
 
         // // accept keyboard input of filename
         // String s = readFile();
 
         // // Create a new SimpleGraph object to store the data
 
+    }
+    
+    public static String AcceptKeyboardInput() {
+        String s = "";
+        while (true) {
+            //printToOut("Enter the file to load as a graph. (graph1.txt)");
+        	System.out.print("Enter the file to load as a graph. (graph1.txt): ");
+            s = KeyboardReader.readString();
+            if (s == KeyboardReader.EOI_STRING) {
+                printToOut("EOI");
+                printToOut("EOI"); // swallowed!!?
+                break;
+            } else if (s == KeyboardReader.ERROR_STRING) {
+            	System.out.print("Error ");
+               // printToErr("ERROR");
+                continue;
+            } else 
+            {
+                printToOut(s + " entered");
+            }
+            break;
+        }
+        return s;
+    }
+    synchronized public static void printToOut(String s) {
+        //print the string to the console
+        System.out.println(s);
     }
 
     // // prompt the user to input a file
