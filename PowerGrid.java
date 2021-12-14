@@ -1,147 +1,93 @@
-mport java.io.*;
+import java.io.*;
 import java.util.*;
 
 public class PowerGrid {
 
-    Edge edge1;
-    Edge edge2;
+	Edge edge1;
+	Edge edge2;
 
-    public static Set<Edge> Kruskal(SimpleGraph graph) {
+	public static Set<Edge> Kruskal(SimpleGraph graph) {
+		
 
-        PriorityQueue<Edge> edgeQueue = new PriorityQueue<>((edge1, edge2) -> {
+		PriorityQueue<Edge> edgeQueue = new PriorityQueue<>((edge1, edge2) -> {
 
-            if ((int) edge1.getData() < (int) edge2.getData()) {
-                return -1;
-            }
-            if ((int) edge1.getData() > (int) edge2.getData()) {
-                return 1;
-            }
-            return 0;
+			if ((int) edge1.getData() < (int) edge2.getData()) {
+				return -1;
+			}
+			if ((int) edge1.getData() > (int) edge2.getData()) {
+				return 1;
+			}
+			return 0;
 
-        });
-        LinkedList edges = graph.edgeList;
-        for (int i = 0; i < edges.size(); i++) {
-            Edge edge = (Edge) edges.get(i);
-            edgeQueue.add(edge);
+		});
+		LinkedList<Edge> edges = graph.edgeList;
+		for (int i = 0; i < edges.size(); i++) {
+			Edge edge = edges.get(i);
+			edgeQueue.add(edge);
 
-        }
+		}
 
-        ArrayList<Vertex> v = new ArrayList<>();
-        int n = graph.vertexList.size();
-        Set<Edge> s = new HashSet<>();
-        for (int i = 0; i < n; i++) {
-            Edge e = edgeQueue.poll();
-            Vertex one = e.getFirstEndpoint();
-            Vertex two = e.getSecondEndpoint();
-            if (!(v.contains(one) && v.contains(two))) {
-                s.add(e);
-                v.add(one);
-                v.add(two);
-                
-            } else {
-            	s.add(e);
-            	v.add(one);
-            	v.add(two);            
-            	}
+		ArrayList<Vertex> v = new ArrayList<>();
+		int n = graph.vertexList.size();
+		Set<Edge> s = new HashSet<>();
+		for (int i = 0; i < n; i++) {
+			Edge e = edgeQueue.poll();
+			Vertex one = e.getFirstEndpoint();
+			Vertex two = e.getSecondEndpoint();
+			if (!(v.contains(one) && v.contains(two))) {
+				s.add(e);
+				v.add(one);
+				v.add(two);
 
-        }
-        Iterator i = s.iterator();
-        while (i.hasNext()) {
-             System.out.println(((Edge) i.next()).getData());
-        }
-        
-        return null ;
+			} else {
+				s.add(e);
+				v.add(one);
+				v.add(two);            
+			}
 
-    }
+		}
+		
+		Iterator<Edge> i = s.iterator();
+		while (i.hasNext()) {
+			System.out.println(i.next().getData());
+		}
+		
+		return s;
 
-    public static void main(String[] args) {
-        SimpleGraph G = new SimpleGraph();
-        Vertex a = G.insertVertex(5, "a");
-        Vertex b = G.insertVertex(6, "b");
-        Vertex c = G.insertVertex(7, "c");
-        Vertex d = G.insertVertex(8, "d");
-        Vertex e = G.insertVertex(9, "e");
-        Edge f = G.insertEdge(a, b, 3, "3");
-        Edge g = G.insertEdge(b, c, 5, "5");
-        Edge h = G.insertEdge(a, e, 1, "1");
-        Edge i = G.insertEdge(c, d, 2, "2");
-        Edge j = G.insertEdge(e, d, 7, "7");
-        Edge k = G.insertEdge(e, c, 6, "6");
-        Edge l = G.insertEdge(b, e, 4, "4");
+	}
 
-        LinkedList edge = G.edgeList;
-        int len = edge.size();
-        for (int s = 0; s < len; s++) {
-            Edge ed = (Edge) edge.get(s);
-            System.out.println(ed.getData());
-        }
+	public static void main(String[] args) {
+		SimpleGraph G = new SimpleGraph();
+		String s = "";
 
-       // System.out.println(Kruskal(G));
-        
-        //accept keyboard input of filename
-        String s = AcceptKeyboardInput();
+		try {
+			Scanner input = new Scanner(System.in);
 
-        // Create a new SimpleGraph object to store the data
-   
-        GraphInput.LoadSimpleGraph(G, s);
+			System.out.print("input File Name: ");
+			s = input.nextLine();
+			File file = new File(s);
+			Scanner scan = new Scanner(file);
 
-        // // accept keyboard input of filename
-        // String s = readFile();
+			while (scan.hasNextLine()) {
+				String[] data = scan.nextLine().split(", ");
+				G.insertVertex(data[0], "");
+				
+				System.out.println(Arrays.toString(data));
 
-        // // Create a new SimpleGraph object to store the data
+			}
+			input.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
 
-    }
-    
-    public static String AcceptKeyboardInput() {
-        String s = "";
-        while (true) {
-            //printToOut("Enter the file to load as a graph. (graph1.txt)");
-        	System.out.print("Enter the file to load as a graph. (graph1.txt): ");
-            s = KeyboardReader.readString();
-            if (s == KeyboardReader.EOI_STRING) {
-                printToOut("EOI");
-                printToOut("EOI"); // swallowed!!?
-                break;
-            } else if (s == KeyboardReader.ERROR_STRING) {
-            	System.out.print("Error ");
-               // printToErr("ERROR");
-                continue;
-            } else 
-            {
-                printToOut(s + " entered");
-            }
-            break;
-        }
-        return s;
-    }
-    synchronized public static void printToOut(String s) {
-        //print the string to the console
-        System.out.println(s);
-    }
 
-    // // prompt the user to input a file
-    // // and read the file and return to
-    // // main
-    // public static String readFile() {
-    // String s = "";
-    // try {
-    // Scanner input = new Scanner(System.in);
+		GraphInput.LoadSimpleGraph(G, s);
 
-    // System.out.print("input File Name: ");
-    // s = input.nextLine();
-    // File file = new File(s);
-    // Scanner scan = new Scanner(file);
+		System.out.println(Kruskal(G));
 
-    // while (scan.hasNextLine()) {
-    // String data = scan.nextLine();
-    // System.out.println(data);
-    // }
-    // input.close();
-    // } catch (FileNotFoundException e) {
-    // System.out.println("An error occurred.");
-    // e.printStackTrace();
-    // }
-    // return s;
-    // }
+	}
+
+
 
 }
